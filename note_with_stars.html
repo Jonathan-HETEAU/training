@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Notes with Stars</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="assets/js/alpinjs.min.js" defer></script>
+</head>
+
+<body>
+    <div class="w-screen h-screen mx-auto flex justify-center flex-col ">
+        <div class="flex w-full justify-center ">
+            <div class="bg-black  border-amber-400/100 w-1/2 border-4  rounded-full py-2 px-4" x-on:mouseout="tmp=0"
+                x-data="{tmp : 0, selected: false , note: 0 }">
+                <div class="flex w-full">
+                    <template x-for="star in [1,2,3,4,5]">
+                        <div class="w-1/5 drop-shadow-xl ">
+                            <svg viewBox="0 0 900 900" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                                x-on:mouseover="tmp = star" x-on:dblclick="selected=false "
+                                x-on:click="selected=true , note = star ">
+                                <g>
+                                    <path class="drop-shadow-xl"
+                                        x-bind:fill="(selected && star <= note && tmp == 0  ) || star <= tmp ? '#f59e0b': '#fbbf24' "
+                                        fill-opacity="1"
+                                        d="M 444.008,25.298263 580.92885,291.11781 877.52716,329.02284 667.02862,541.38507 722.63271,835.18011 455.6166,700.60764 193.38352,844.27794 238.85702,548.74535 21.183974,343.74343 316.30426,295.66671 Z"
+                                        transform="rotate(1.0119269,450.92246,661.04871)" />
+                                    <path class=""
+                                        x-bind:fill="(selected && star <= note && tmp == 0 ) || star <= tmp  ? '#fbbf24': '#ffffff' "
+                                        fill-opacity="1"
+                                        d="m 446.00389,193.88178 57.12198,138.41423 146.40566,31.41341 -113.98809,97.09858 15.3659,148.94734 -127.5705,-78.40401 -136.909,60.6411 35.14518,-145.55492 -99.98032,-111.46907 149.29142,-11.55389 z"
+                                        transform="matrix(1.6540007,-0.08824659,0.08717325,1.6635856,-293.37807,-182.87263)" />
+                                </g>
+                            </svg>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+
+</html>

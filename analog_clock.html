@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Horloge analogique</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="assets/js/alpinjs.min.js" defer></script>
+</head>
+
+<body>
+    <div class="w-screen h-screen flex flex-col justify-center bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90%">
+        <div class="box-content h-96 w-96 mx-auto flex flex-col justify-center" x-data="time">
+            <h1 class="text-center text-4xl font-bold">Horloge analogique</h1>
+            <h2 class="relative text-center text-2xl font-bold" x-text="`${formatToString(h)}:${formatToString(m)}:${formatToString(s)}`"></h2>
+            <svg class="w-full h-full" viewBox="0 0 1000 1000">
+                <g>
+                    <circle cx="50%" cy="50%" r="460" fill="transparent" stroke="white" stroke-width="20"
+                        stroke-dasharray="0.2 0.8" stroke-dashoffset="0.1" pathLength="60" />
+                    <circle cx="50%" cy="50%" r="480" fill="transparent" stroke="white" stroke-width="20" />
+                    <g>
+                        <line x1="500" y1="20" x2="500" y2="980" stroke-dasharray="50,860" stroke-width="20"
+                            stroke="#000" transform="rotate(0,500,500)" stroke-linecap="round"/>
+                        <line x1="500" y1="20" x2="500" y2="980" stroke-dasharray="50,860" stroke-width="20"
+                            stroke="#000" transform="rotate(90,500,500)" stroke-linecap="round"/>
+                        <line x1="500" y1="20" x2="500" y2="980" stroke-dasharray="40,880" stroke-width="10"
+                            stroke="#000" transform="rotate(30,500,500)" stroke-linecap="round"/>
+                        <line x1="500" y1="20" x2="500" y2="980" stroke-dasharray="40,880" stroke-width="10"
+                            stroke="#000" transform="rotate(60,500,500)" stroke-linecap="round"/>
+                        <line x1="500" y1="20" x2="500" y2="980" stroke-dasharray="40,880" stroke-width="10"
+                            stroke="#000" transform="rotate(120,500,500)" stroke-linecap="round"/>
+                        <line x1="500" y1="20" x2="500" y2="980" stroke-dasharray="40,880" stroke-width="10"
+                            stroke="#000" transform="rotate(150,500,500)" stroke-linecap="round"/>
+                    </g>
+                    <g>
+                        <line x1="500" y1="130" x2="500" y2="520" stroke-linecap="round" stroke-width="30" stroke="#6366f1"
+                            x-bind:transform="`rotate(${m*6},500,500)`" />
+                        <line x1="500" y1="300" x2="500" y2="510" stroke-linecap="round" stroke-width="40"
+                            stroke="black" x-bind:transform="`rotate(${h*30},500,500)`" />
+                        <line x1="500" y1="80" x2="500" y2="530" stroke-linecap="round" stroke-width="20" stroke="white"
+                            x-bind:transform="`rotate(${s*6},500,500)`" />
+                    </g>
+                </g>
+            </svg>
+        </div>
+        
+    </div>
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('time', () => ({
+                h: new Date().getHours(),
+                m: new Date().getMinutes(),
+                s: new Date().getSeconds(),
+                init() {
+                    this.updateTime()
+                    setInterval(() => this.updateTime(), 500);
+                },
+                updateTime() {
+                    const now = new Date();
+                    this.h = now.getHours();
+                    this.m = now.getMinutes();
+                    this.s = now.getSeconds();
+                },
+                formatToString(element){
+                    return element.toLocaleString('fr-FR', {minimumIntegerDigits: 2, useGrouping:false})
+                }
+
+            }))
+
+
+        })
+
+    </script>
+</body>
+
+</html>

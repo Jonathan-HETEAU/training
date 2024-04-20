@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Flash Cards</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="/assets/js/alpinjs.min.js" defer></script>
+</head>
+
+<body>
+    <div class="w-screen h-screen flex flex-col justify-center bg-black" x-data="flashCards">
+        <div class=" relative mx-auto w-full h-32 ">
+            <div class="absolute w-full">
+                <h1 class="text-center text-6xl font-bold text-white  ">Flash Cards</h1>
+            </div>
+            <div class="absolute w-full">
+                <h1 class="relative bottom-1 left-1 text-center w-full text-6xl font-bold text-indigo-500/50 ">Flash
+                    Cards</h1>
+            </div>
+        </div>
+        <div class=" mx-auto flex flex-col justify-center w-96 h-48 ">
+
+            <div x-show="cards.length > 0" class="h-full w-full ">
+                <div x-show="currentCardIndex < currentCards.length" class="h-full w-full ">
+                    <div x-show="showAnswer"
+                        x-on:click="nextCard(true)"
+                        class="box-content h-full w-full flex flex-col justify-center rounded-2xl bg-indigo-500 border-white border-2">
+
+                        <h3 class="text-center top-0 underline-offset-2 uppercase</div> font-extrabold my-2 text-white">
+                            Answer</h3>
+                        <p class="flex items-center justify-center text-center align-middle text-black font-extrabold text-pretty grow m-4 p-4 mt-0 rounded-b-2xl bg-indigo-400 border-t-2 border-t-white"
+                            x-text="currentCards[currentCardIndex].answer">
+                        </p>
+                        <div class="relative bottom-0 w-full flex flex-row justify-center ">
+
+                            <button x-on:click="$event.stopPropagation();nextCard(false)"
+                                class="absolute  -top-5 bg-white hover:bg-black border-indigo-500 hover:border-white border-2 p-1 rounded-full drop-shadow-2xl shadow-2xl shadow-white/30 text-indigo-500 font-bold hover:text-white   hover:bg-indigo-500/90 ">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                    class="w-10 h-10">
+                                    <path fill-rule="evenodd"
+                                        d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25Zm-2.625 6c-.54 0-.828.419-.936.634a1.96 1.96 0 0 0-.189.866c0 .298.059.605.189.866.108.215.395.634.936.634.54 0 .828-.419.936-.634.13-.26.189-.568.189-.866 0-.298-.059-.605-.189-.866-.108-.215-.395-.634-.936-.634Zm4.314.634c.108-.215.395-.634.936-.634.54 0 .828.419.936.634.13.26.189.568.189.866 0 .298-.059.605-.189.866-.108.215-.395.634-.936.634-.54 0-.828-.419-.936-.634a1.96 1.96 0 0 1-.189-.866c0-.298.059-.605.189-.866Zm-4.34 7.964a.75.75 0 0 1-1.061-1.06 5.236 5.236 0 0 1 3.73-1.538 5.236 5.236 0 0 1 3.695 1.538.75.75 0 1 1-1.061 1.06 3.736 3.736 0 0 0-2.639-1.098 3.736 3.736 0 0 0-2.664 1.098Z"
+                                        clip-rule="evenodd" />
+                                </svg>
+
+
+                            </button>
+                            
+                        </div>
+                    </div>
+                    <div x-show="!showAnswer"
+                        class="box-content h-full w-full flex flex-col justify-center rounded-2xl bg-amber-500 border-white border-2"
+                        x-on:click="showAnswer= true">
+                        <h3 class="text-center top-0 underline-offset-2 uppercase font-extrabold my-2 text-white">
+                            Question</h3>
+                        <p class="flex items-center justify-center text-center align-middle text-black font-extrabold text-pretty grow m-4 p-4 mt-0 rounded-b-2xl bg-amber-400 border-t-2 border-t-white"
+                            x-text="currentCards[currentCardIndex].question">
+                        </p>
+                    </div>
+                </div>
+                <div x-show="currentCardIndex >= currentCards.length" class="w-fit mx-auto">
+                    <h3 class="mx-auto text-center uppercase font-extrabold underline text-white "> try again </h3>
+                    <div x-show="falseCards.length > 0" class="">
+                        <div x-on:click="tryAgain()"
+                            class="text-center w-fit bg-white hover:bg-black border-indigo-500 hover:border-white border-2 p-1 rounded drop-shadow-2xl shadow-2xl shadow-white/30 text-indigo-500 font-bold hover:text-white   hover:bg-indigo-500/40 ">
+                            Cards False</div>
+                    </div>
+                    <div class="">
+                        <div x-on:click="reStart()"
+                            class=" text-center w-auto bg-white hover:bg-black border-indigo-500 hover:border-white border-2 p-1 rounded drop-shadow-2xl shadow-2xl shadow-white/30 text-indigo-500 font-bold hover:text-white   hover:bg-indigo-500/40 ">
+                            All</div>
+                    </div>
+                </div>
+            </div>
+            <div x-show="cards.length == 0 || currentCardIndex >= currentCards.length" class="mx-auto">
+                <input type="file" accept=".json" x-ref="fileInput" x-on:change="loadFile($event.target.files[0] )"
+                    class="hidden">
+                <button x-on:click="$refs.fileInput.click()"
+                    class="bg-white hover:bg-black border-indigo-500 hover:border-white border-2 p-1 rounded drop-shadow-2xl shadow-2xl shadow-white/30 text-indigo-500 font-bold hover:text-white   hover:bg-indigo-500/40 ">Open
+                    JSON</button>
+            </div>
+        </div>
+        <div x-show="cards.length > 0"
+            class="font-extrabold text-3xl absolute h-fit w-full bottom-0 left-0 right-0 flex flex-row justify-between ">
+
+            <div class="bg-green-500 aspect-square border-white rounded-tr-full p-3 pt-6 pr-6 border-2">
+                <span class="my-auto w-full text-white" x-text="currentCardIndex - falseCards.length"></span>
+            </div>
+            <div class="text-white">
+                <span x-text="currentCardIndex"></span>/<span x-text="currentCards.length"></span>
+            </div>
+            <div class="bg-red-500 aspect-square border-white rounded-tl-full p-3 pt-6 pl-6 border-2">
+                <span class="my-auto w-full text-white" x-text="falseCards.length"></span>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('flashCards', () => ({
+                cards: [
+                ],
+                currentCardIndex: 0,
+                currentCards: [],
+                falseCards: [],
+                showAnswer: false,
+                startGame: false,
+
+                init(cards = [{ "question": "question", "answer": "answer" }]) {
+                    if (cards.length === 0) return
+                    this.cards = cards
+                    this.currentCardIndex = 0
+                    this.currentCards = this.cards.copyWithin()
+                    this.falseCards = []
+                    this.showAnswer = false
+                    this.startGame = true
+                    this.shuffleCards()
+                },
+
+                nextCard(result = true) {
+
+                    this.showAnswer = false
+                    if (this.currentCardIndex < this.currentCards.length) {
+                        if (!result) {
+                            this.falseCards.push(this.cards[this.currentCardIndex])
+                        }
+                        this.currentCardIndex++
+                    }
+
+                },
+
+                tryAgain() {
+                    this.currentCardIndex = 0
+                    this.currentCards = this.falseCards
+                    this.falseCards = []
+                    this.shuffleCards()
+                },
+
+                reStart() {
+                    this.init(this.cards)
+                },
+
+                loadFile(file) {
+                    const reader = new FileReader()
+                    reader.onload = () => {
+                        try {
+                            this.init(JSON.parse(reader.result).filter(card => card.question && card.answer))
+                        } catch (error) {
+                            window.alert('Invalid JSON file')
+                            console.error(error)
+                            return
+                        }
+                    }
+                    reader.readAsText(file)
+
+                },
+
+                shuffleCards() {
+                    this.currentCards = this.currentCards.sort(() => Math.random() - 0.5)
+                }
+
+            }))
+        })
+    </script>
+</body>
+
+</html>
